@@ -34,7 +34,36 @@ app.post('/reviews/carouselReviews', (req, res) => {
   arrayOfIdsReviewGetter(req, res, idArray)
 })
 
-app.listen(port, () => {
+//GET
+
+//POST
+app.post('/create', (req, res) => {
+  console.log('marcelo post')
+  db.insertDocument()
+  res.send('document created')
+})
+
+//UPDATE
+app.put('/update', (req, res) => {
+  console.log('marcelo put');
+  db.updateDocument();
+  res.send('document updated')
+})
+
+//DELETE
+app.delete('/delete', (req, res) => {
+  console.log('marcelo delete')
+  db.deleteDocument();
+  res.send('document deleted')
+})
+
+ // error handler middleware
+app.use((error, req, res, next) => {
+  console.error(error.stack);
+  res.status(500).send("Something Broke!");
+ })
+
+ app.listen(port, () => {
   console.log(`Example app listening at ${port}`)
 })
 
