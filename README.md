@@ -1,4 +1,4 @@
-# Audible Reviews
+# Audible Reviews - SDC Marcelo Yates
 
 * Is hosted on an AWS EC2 instance and uses S3 buckets
 
@@ -61,7 +61,7 @@
 
 * The Server with endpoints is in Server/server.js
 
-* The two endpoints available are books/:id/reviews and /reviews/carouselReviews
+* The endpoints available are books/:id/reviews and /reviews/carouselReviews
 
 * send <GET> request to http://yourEC2Instance:4001/books/:id/reviews
 * returns multiple review objects per id
@@ -87,6 +87,12 @@
 reviewTitle: string
 date: date,
 overalStars: Number}
+
+* send <POST> request to (/create) to create a new review
+
+* send <UPDATE> request to (/update) to update an existing review
+
+* send <DELETE> request to (/delete) to delete a review
 
 ## Installation
 
