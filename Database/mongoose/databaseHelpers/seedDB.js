@@ -1,7 +1,7 @@
 const Review = require ('../database.js');
 const Faker = require ('faker');
 const randomDate = require('./seedDBHelperFunctions').randomDate;
-const imageGetterFunction  = require('../../S3_Access/imagesObject.js').imageGetter;
+const imageGetterFunction  = require('../../../S3_Access/imagesObject.js').imageGetter;
 const randomImage = require('./seedDBHelperFunctions').randomImage;
 const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 const {performance} = require('perf_hooks');
