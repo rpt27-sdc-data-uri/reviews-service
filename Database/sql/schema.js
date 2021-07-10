@@ -14,7 +14,7 @@ client.connect()
 const createUsersTableText = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS users (
-  userId SERIAL NOT NULL PRIMARY KEY,
+  user_id SERIAL NOT NULL PRIMARY KEY,
   username VARCHAR(255),
   url VARCHAR(255)
 );
@@ -32,7 +32,7 @@ client.query(createUsersTableText)
 const createBooksTableText = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS books (
-  bookId SERIAL NOT NULL PRIMARY KEY,
+  book_id SERIAL NOT NULL PRIMARY KEY,
   title VARCHAR(255)
 );
 `
@@ -49,16 +49,16 @@ client.query(createBooksTableText)
 const createReviewsTableText = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS reviews (
-  reviewId SERIAL NOT NULL PRIMARY KEY,
-  userId VARCHAR(255),
-  bookId VARCHAR(255),
-  review VARCHAR(255),
+  review_id SERIAL NOT NULL PRIMARY KEY,
+  user_id INT,
+  book_id INT,
+  review TEXT,
   date VARCHAR(255),
-  overallStars SMALLINT,
-  performanceStars SMALLINT,
-  storyStars SMALLINT,
-  reviewTitle VARCHAR(255),
-  foundHelpful SMALLINT,
+  overall_stars SMALLINT,
+  performance_stars SMALLINT,
+  story_stars SMALLINT,
+  review_title VARCHAR(255),
+  found_helpful SMALLINT,
   source VARCHAR(255),
   location VARCHAR(255)
 );
