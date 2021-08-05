@@ -2,9 +2,13 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const port = 4001;
-app.use('/books/:id', express.static(path.join(__dirname, '..', 'dist')));
-const db = require('../Database/database.js');
-const reviewCollection = db.Review;
+//app.use('/books/:id/reviews', express.static(path.join(__dirname, '..', 'dist')));
+app.use('/books/:id/', express.static(path.join(__dirname, '..', 'dist')));
+
+//const db = require('../Database/database.js');
+const mongoDb = require('../Database/mongo/index.js');
+const postgres = require('../Database/sql/index.js');
+//const reviewCollection = db.Review;
 const Promise = require('bluebird');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -19,10 +23,12 @@ app.use('/books/:id/reviews', AmpOptimizerMiddleware.create());
 //______This route returns all reviews on page load.
 //______It returns {reviewerName: String,reviewerId: Number,review: String,urlString: String,bookName: String,bookId: Number,date: Date,overallStars: Number,performanceStars: Number,storyStars: Number,title: String,foundHelpful: Number,source: String, location: String}
 //______This route fires on page load since this is a route integral to the initial structure of the page
-app.get('/books/:id/reviews', (req, res) => {
+app.get('/books/:id/reviews', async (req, res) => {
   const id = req.params.id;
   res.set({"Cache-Control": "public", 'Access-Control-Allow-Origin': '*'})
-  reviewGetter(req, res, id);
+  let reviews = await postgres.getDocumentSQL(id)
+  //console.log('reviews', reviews, id)
+  res.send(reviews)
 });
 
 //_____This route returns reviews for carousel data such as when one wants review data for recommended books and related books.
@@ -34,27 +40,39 @@ app.post('/reviews/carouselReviews', (req, res) => {
   arrayOfIdsReviewGetter(req, res, idArray)
 })
 
+//API Extension - Marcelo Yates
+
 //GET
+app.get('/benchmark/get/', async (req, res) => {
+  //console.log('marcelo get')
+  // const id = req.params.id;
+  let reviews = await postgres.getDocumentSQL(req.body.id)
+
+  // //let review = await mongoDb.getDocumentMongo(100000)
+  res.status(200).send(reviews);
+});
 
 //POST
-app.post('/create', (req, res) => {
-  console.log('marcelo post')
-  db.insertDocument()
-  res.send('document created')
+app.post('/benchmark/post', async (req, res) => {
+  //console.log('marcelo post', req.body)
+  let review = Object.values(req.body)
+  console.log('server reviews', req.body)
+  await postgres.insertDocumentSQL(review)
+  res.status(200).send(req.body);
 })
 
 //UPDATE
-app.put('/update', (req, res) => {
+app.put('/benchmark/update', async (req, res) => {
   console.log('marcelo put');
-  db.updateDocument();
-  res.send('document updated')
+  await postgres.updateDocumentSQL(req.body.test)
+  res.status(200).send('document updated');
 })
 
 //DELETE
-app.delete('/delete', (req, res) => {
+app.delete('/benchmark/delete', async (req, res) => {
   console.log('marcelo delete')
-  db.deleteDocument();
-  res.send('document deleted')
+  await postgres.deleteDocumentSQL(req.body.id)
+  res.status(200).send('document deleted');
 })
 
  // error handler middleware

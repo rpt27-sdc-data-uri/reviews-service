@@ -1,14 +1,15 @@
 const Promise = require('bluebird');
-const db = require('../Database/database.js');
+const db = require('../Database/mongoose/database.js');
 const reviewCollection = db;
 
 
 const reviewGetter = (req, res, id) => {
+
   if (res === undefined) {
     return;
   }
   return new Promise(async (resolve, reject) => {
-    const data = require('../Database/database.js');
+    const data = require('../Database/mongoose/database.js');
     const review = data.Review;
     resolve(review);
   })

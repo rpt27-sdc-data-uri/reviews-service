@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 const Faker = require ('faker');
-const randomDate = require('../databaseHelpers/seedDBHelperFunctions').randomDate;
+const randomDate = require('../mongoose/databaseHelpers/seedDBHelperFunctions').randomDate;
 const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 const {performance} = require('perf_hooks');
 
@@ -114,24 +114,138 @@ function reviewGenerator(id) {
   return reviews;
 }
 
-client.connect(async function(err, mongoclient) {
-  let t0 = performance.now();
-  console.log('start seeding')
-  var db = mongoclient.db("mongo_sdc");
+//Seeding function
+// client.connect(async function(err, mongoclient) {
+//   let t0 = performance.now();
+//   console.log('start seeding')
+//   var db = mongoclient.db("mongo_sdc");
 
-  for(let i = 0; i < 10000000; i++) {
-    let reviews = await reviewGenerator(i);
+//   for(let i = 0; i < 10000000; i++) {
+//     let reviews = await reviewGenerator(i);
 
-    if (reviews.length > 0) {
-      await db.collection('reviews').insertMany(reviews)
-    }
+//     if (reviews.length > 0) {
+//       await db.collection('reviews').insertMany(reviews)
+//     }
+//   }
+//   let t1 = performance.now();
+//   console.log('End: time elapsed ', (t1 - t0))
+
+//   // Close the connection
+//   mongoclient.close();
+// });
+
+//Indexing function
+// async function indexing() {
+
+//     try {
+//     await client.connect();
+//     const database = client.db("mongo_sdc");
+//     const reviews = database.collection("reviews");
+
+//     await reviews.createIndex({ "bookId": 1 });
+//     console.log('indexed');
+//   } finally {
+//     await client.close();
+//   }
+// }
+
+// indexing();
+
+//Get Document with param
+async function getDocumentMongo(key) {
+
+  try {
+    console.log("bookId ", key)
+    var t0 = performance.now()
+
+    await client.connect();
+    const database = client.db("mongo_sdc");
+    const reviews = database.collection("reviews");
+    const query = { bookId: key };
+
+    const review = await reviews.findOne(query)
+    return review;
+  } finally {
+    var t1 = performance.now();
+    let executionTime = t1 - t0;
+    console.log('Time in milliseconds searching last 10% of database:', executionTime)
+    await client.close();
   }
-  let t1 = performance.now();
-  console.log('End: time elapsed ', (t1 - t0))
+}
 
-  // Close the connection
-  mongoclient.close();
-});
+//Insert Document with param
+async function insertDocumentMongo(key) {
+
+  try {
+    // console.log("bookId ", key)
+    // var t0 = performance.now()
+
+    // await client.connect();
+    // const database = client.db("mongo_sdc");
+    // const reviews = database.collection("reviews");
+    // const query = { bookId: key };
+
+    // const review = await reviews.findOne(query)
+  } finally {
+    var t1 = performance.now();
+    let executionTime = t1 - t0;
+    console.log('Time in milliseconds searching last 10% of database:', executionTime)
+    await client.close();
+  }
+}
+
+//Update Document with param
+async function updateDocumentMongo(key) {
+
+  try {
+    // console.log("bookId ", key)
+    // var t0 = performance.now()
+
+    // await client.connect();
+    // const database = client.db("mongo_sdc");
+    // const reviews = database.collection("reviews");
+    // const query = { bookId: key };
+
+    // const review = await reviews.findOne(query)
+  } finally {
+    var t1 = performance.now();
+    let executionTime = t1 - t0;
+    console.log('Time in milliseconds searching last 10% of database:', executionTime)
+    await client.close();
+  }
+}
+
+//Delete review with param
+async function deleteDocumentMongo(key) {
+
+  try {
+    // console.log("bookId ", key)
+    // var t0 = performance.now()
+
+    // await client.connect();
+    // const database = client.db("mongo_sdc");
+    // const reviews = database.collection("reviews");
+    // const query = { bookId: key };
+
+    // const review = await reviews.findOne(query)
+  } finally {
+    var t1 = performance.now();
+    let executionTime = t1 - t0;
+    console.log('Time in milliseconds searching last 10% of database:', executionTime)
+    await client.close();
+  }
+}
+
+module.exports = {
+  getDocumentMongo: getDocumentMongo,
+  insertDocumentMongo: insertDocumentMongo,
+  updateDocumentMongo: updateDocumentMongo,
+  deleteDocumentMongo: deleteDocumentMongo
+}
+
+
+
+
 
 
 

@@ -71,3 +71,7 @@ client.query(createReviewsTableText)
 .catch((err) => {
   console.log('error', err)
 })
+
+// ,
+//   FOREIGN KEY (user_id) REFERENCES users(user_id),
+//   FOREIGN KEY (book_id) REFERENCES books(book_id)

@@ -6,13 +6,31 @@ import ReviewBody from './reviewBody';
 import SortBy from './sortBy';
 import FilterBy from './filterBy';
 import Nav from './nav';
+const axios = require('axios');
 
 //App componenet
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {reviews: [], carouselReviews: [], itemsToShow: 10, Audible: 'Audible', Canada: 'Canada', reviewBodyClass: 'defaultReview', readMoreDisplay: 'readMore', hideMeDisplay: 'hideHideMeButton'};
+    this.state = { reviews: [], carouselReviews: [], itemsToShow: 10, Audible: 'Audible', Canada: 'Canada', reviewBodyClass: 'defaultReview', readMoreDisplay: 'readMore', hideMeDisplay: 'hideHideMeButton', currentId: 0 };
+
+    // const query = window.location.search.slice(4);
+    // console.log('query', query)
+
+    // axios.get('/books/reviews' + query)
+    // .then((response) => {
+    //   let linksList = Object.values(response.data.imagesUrl)
+    //   this.setState({
+    //     image: linksList[0],
+    //     imageList: linksList,
+    //     modalImage: linksList[0],
+    //     modalImageList: linksList,
+    //     show: false
+    //   })
+    //   console.log('response', response)
+    // })
+
     this.reviewGetter = this.reviewGetter.bind(this);
     // this.carouselReviewsGetter = this.carouselReviewsGetter.bind(this);
     this.sortReviews = this.sortReviews.bind(this);
@@ -32,7 +50,7 @@ class App extends React.Component {
         newReviews[i].reviewBodyClass = 'defaultReview';
       }
     }
-    this.setState({reviews: newReviews});
+    this.setState({ reviews: newReviews });
   }
 
   setReviewBodyClassToShowReview(id) {
@@ -44,12 +62,12 @@ class App extends React.Component {
         newReviews[i].reviewBodyClass = 'reviewBodyText';
       }
     }
-    this.setState({reviews: newReviews});
+    this.setState({ reviews: newReviews });
   }
 
-  setAudibleClass () {
-    this.setState({Audible: 'Audible', Canada: 'Canada'});
-    this.setState({itemsToShow: 10});
+  setAudibleClass() {
+    this.setState({ Audible: 'Audible', Canada: 'Canada' });
+    this.setState({ itemsToShow: 10 });
     for (let i = 0; i < this.state.reviews.length; i++) {
       if (this.state.reviews[i].location === 'United States') {
         this.state.reviews[i].display = true;
@@ -59,9 +77,9 @@ class App extends React.Component {
     }
   }
 
-  setCanadaClass () {
-    this.setState({Audible: 'noDisplayAudible', Canada: 'displayCanada'});
-    this.setState({itemsToShow: 10});
+  setCanadaClass() {
+    this.setState({ Audible: 'noDisplayAudible', Canada: 'displayCanada' });
+    this.setState({ itemsToShow: 10 });
     for (let i = 0; i < this.state.reviews.length; i++) {
       if (this.state.reviews[i].location === 'Canada') {
         this.state.reviews[i].display = true;
@@ -71,13 +89,13 @@ class App extends React.Component {
     }
   }
 
-  showMore () {
+  showMore() {
     let itemsToShow = this.state.itemsToShow + 10;
-    this.setState({itemsToShow: itemsToShow});
+    this.setState({ itemsToShow: itemsToShow });
   }
 
-  sortReviews (e) {
-    this.setState({itemsToShow: 10});
+  sortReviews(e) {
+    this.setState({ itemsToShow: 10 });
     if (e.target.value === 'mostHelpful') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
@@ -85,16 +103,16 @@ class App extends React.Component {
           return b.foundHelpful - a.foundHelpful;
         })
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
     }
-     if (e.target.value === 'mostRecent') {
+    if (e.target.value === 'mostRecent') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
         reviews.sort((a, b) => {
           return Date.parse(b.date) - Date.parse(a.date);
         })
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
     }
 
     if (e.target.value === '5 star only') {
@@ -106,9 +124,9 @@ class App extends React.Component {
           reviews[i].display = false;
         }
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
     }
-     if (e.target.value === '4 star only') {
+    if (e.target.value === '4 star only') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
         if (reviews[i].overallStars === 4) {
@@ -117,10 +135,10 @@ class App extends React.Component {
           reviews[i].display = false;
         }
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
 
     }
-     if (e.target.value === '3 star only') {
+    if (e.target.value === '3 star only') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
         if (reviews[i].overallStars === 3) {
@@ -129,10 +147,10 @@ class App extends React.Component {
           reviews[i].display = false;
         }
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
 
     }
-     if (e.target.value === '2 star only') {
+    if (e.target.value === '2 star only') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
         if (reviews[i].overallStars === 2) {
@@ -141,10 +159,10 @@ class App extends React.Component {
           reviews[i].display = false;
         }
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
 
     }
-     if (e.target.value === '1 star only') {
+    if (e.target.value === '1 star only') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
         if (reviews[i].overallStars === 1) {
@@ -153,24 +171,35 @@ class App extends React.Component {
           reviews[i].display = false;
         }
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
 
     }
-     if (e.target.value === 'All Stars') {
+    if (e.target.value === 'All Stars') {
       let reviews = this.state.reviews.slice(0);
       for (let i = 0; i < reviews.length; i++) {
         reviews[i].display = true;
       }
-      this.setState({'reviews': reviews});
+      this.setState({ 'reviews': reviews });
     }
   }
 
   reviewGetter() {
+    //console.log('review getter')
+
     let pathname = document.location.pathname;
-    fetch(`http://ec2-54-153-95-228.us-west-1.compute.amazonaws.com:80${pathname}reviews`)
+    console.log('pathname', pathname)
+    // fetch(`http://localhost:4001${pathname}`)
+    console.log(pathname + 'reviews')
+    fetch(pathname + 'reviews')
       .then((response) => response.json())
       .then(data => {
+        console.log('data', data)
+        window.history.pushState('color', 'Title',  `${pathname}`);
         let nameObject = {};
+        this.setState({currentId: data[0].bookId});
+        if (data[0].bookId < 50) {
+          this.setState({reviewBodyClass: 'defaultReviewBlue'})
+        }
         for (let i = 0; i < data.length; i++) {
           let htmlReview = data[i].review.split('<br>');
           let htmlJoin = htmlReview.join("\n\n");
@@ -204,22 +233,39 @@ class App extends React.Component {
     this.reviewGetter();
   }
   render() {
-    return (
-      <div className={"reviewsShell"}>
-        <Nav state={this.state} setCanadaClass={this.setCanadaClass} setAudibleClass={this.setAudibleClass}/>
-        <div className="filters">
-          <SortBy sortReviews={this.sortReviews}/>
-          <FilterBy sortReviews={this.sortReviews}/>
-        </div>
-        <div className="reviewBodyContainer">
-          <ReviewBody className="reviewBody" readMoreDisplay={this.state.readMoreDisplay} hideMeDisplay={this.state.hideMeDisplay} readMore={this.setReviewBodyClassToShowReview} hideMe={this.setReviewBodyClassToHidden} reviewBodyClass={this.state.reviewBodyClass} itemsToShow={this.state.itemsToShow} reviews={this.state.reviews} />
-        </div>
-        <button className="showMore" onClick={(() => this.showMore())}>
-          Show More
+    if (this.state.currentId < 50) {
+      return (
+        <div className={"reviewsShell"}>
+          <Nav state={this.state} setCanadaClass={this.setCanadaClass} setAudibleClass={this.setAudibleClass} />
+          <div className="filters">
+            <SortBy sortReviews={this.sortReviews} />
+            <FilterBy sortReviews={this.sortReviews} />
+          </div>
+          <div className="reviewBodyContainer">
+            <ReviewBody className="reviewBody" readMoreDisplay={this.state.readMoreDisplay} hideMeDisplay={this.state.hideMeDisplay} readMore={this.setReviewBodyClassToShowReview} hideMe={this.setReviewBodyClassToHidden} reviewBodyClass={this.state.reviewBodyClass} itemsToShow={this.state.itemsToShow} reviews={this.state.reviews} />
+          </div>
+          <button className="showMore" onClick={(() => this.showMore())}>
+            Show More
         </button>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div className={"reviewsShell"}>
+          <Nav state={this.state} setCanadaClass={this.setCanadaClass} setAudibleClass={this.setAudibleClass} />
+          <div className="filters">
+            <SortBy sortReviews={this.sortReviews} />
+            <FilterBy sortReviews={this.sortReviews} />
+          </div>
+          <div className="reviewBodyContainer">
+            <ReviewBody className="reviewBody" readMoreDisplay={this.state.readMoreDisplay} hideMeDisplay={this.state.hideMeDisplay} readMore={this.setReviewBodyClassToShowReview} hideMe={this.setReviewBodyClassToHidden} reviewBodyClass={this.state.reviewBodyClass} itemsToShow={this.state.itemsToShow} reviews={this.state.reviews} />
+          </div>
+          <button className="showMore" onClick={(() => this.showMore())}>
+            Show More
+        </button>
+        </div>
+      )
+    }
   }
 }
-
-export default App;
+  export default App;
