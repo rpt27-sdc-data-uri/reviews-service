@@ -1,5 +1,5 @@
 {
-  "name": "rpt27-reviewsFEC",
+  "name": "rpt27-reviewsfec",
   "version": "1.0.0",
   "description": "FEC Reviews",
   "main": "database.js",
@@ -28,6 +28,7 @@
     "circleci": "^0.3.3",
     "csv-write-stream": "^2.0.0",
     "deepai": "^1.0.17",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "fast-csv": "^4.3.6",
