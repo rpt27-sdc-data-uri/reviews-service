@@ -1,33 +1,33 @@
-const Faker = require ('faker');
-const LoremIpsum = require("lorem-ipsum").LoremIpsum;
+// const Faker = require ('faker');
+// const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/sdc', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+// const mongoose = require('mongoose');
+// //mongoose.connect('mongodb://localhost/sdc', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('We\'re Connected!')
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//   console.log('We\'re Connected!')
 
-});
-const reviewSchema = new mongoose.Schema({
-  reviewerName: String,
-  reviewerId: Number,
-  review: String,
-  urlString: String,
-  bookTitle: String,
-  bookId: Number,
-  date: Date,
-  overallStars: Number,
-  performanceStars: Number,
-  storyStars: Number,
-  reviewTitle: String,
-  foundHelpful: Number,
-  source: String,
-  location: String
-});
+// });
+// const reviewSchema = new mongoose.Schema({
+//   reviewerName: String,
+//   reviewerId: Number,
+//   review: String,
+//   urlString: String,
+//   bookTitle: String,
+//   bookId: Number,
+//   date: Date,
+//   overallStars: Number,
+//   performanceStars: Number,
+//   storyStars: Number,
+//   reviewTitle: String,
+//   foundHelpful: Number,
+//   source: String,
+//   location: String
+// });
 
-module.exports = mongoose.model('Review', reviewSchema);
+// module.exports = mongoose.model('Review', reviewSchema);
 
 //MY
 //const Review = mongoose.model('Review', reviewSchema)

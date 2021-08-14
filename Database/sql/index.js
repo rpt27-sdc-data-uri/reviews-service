@@ -7,28 +7,35 @@ const {performance} = require('perf_hooks');
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
-    max: 8,
-    min: 4
+    max: 2,
+    min: 1
   },
   wordsPerSentence: {
-    max: 16,
-    min: 4
+    max: 5,
+    min: 3
   }
 });
 const pgp = require('pg-promise')({
   capSQL: true // generate capitalized SQL
 });
 
-const connectionObject = {
-  user: 'root',
-  host: 'localhost',
+// const db = new Pool({
+//     user: 'root',
+//     host: 'localhost',
+//     database: 'audible',
+//     password: '',
+//     port: 5432
+// })
+
+const db = new Pool({
+  user: 'postgres',
+  host: '3.136.156.146',
   database: 'audible',
-  password: '',
-  port: 5432,
-  idleTimeoutMillis: 0,
-  connectionTimeoutMillis: 0
-}
-const db = pgp(connectionObject); // your database object
+  password: 'password',
+  port: 5432
+})
+
+//const db = pool.connect(); // your database object
 
 //populate 10M books
 const csBooks = new pgp.helpers.ColumnSet([
@@ -37,9 +44,11 @@ const csBooks = new pgp.helpers.ColumnSet([
 
 function getNextBooks(t, pageIndex) {
   let data = null;
-  if (pageIndex < 1000) {
+  if (pageIndex < 900) {
+    console.log('page', pageIndex)
       data = [];
       for (let i = 0; i < 10000; i++) {
+        //console.log('book', i)
           data.push({
             title: lorem.generateWords(Math.floor(Math.random() * 6))
           });
@@ -136,7 +145,7 @@ function randomIntFromInterval(min, max) {
 function getNextReviews(t, pageIndex) {
 
   let data = null;
-  if (pageIndex < 2000) {
+  if (pageIndex < 1000) {
     console.log('page ', pageIndex)
       data = [];
       for (let i = 0; i < 10000; i++) {
@@ -191,7 +200,7 @@ function getNextReviews(t, pageIndex) {
         //review
         let review;
         let numberOfParagraphs = Math.floor(Math.random() * 2) + 1;
-        let numberOfSentences = Math.floor(Math.random() * 4) + 1;
+        let numberOfSentences = Math.floor(Math.random() * 2) + 1;
         let conditional = Math.random() * 5;
         if (conditional < 4) {
           review = lorem.generateParagraphs(numberOfParagraphs);
@@ -200,7 +209,7 @@ function getNextReviews(t, pageIndex) {
         }
         //review title
         let reviewTitle;
-        let numberOfWords = Math.floor(Math.random() * 6);
+        let numberOfWords = Math.floor(Math.random() * 3);
         reviewTitle = lorem.generateWords(numberOfWords);
 
           data.push({
@@ -250,9 +259,9 @@ function reviewSeeder() {
 
 //Indexing function
 async function indexing() {
-  console.log('indexing...')
-  // await db.query('CREATE INDEX idx_book_id ON reviews (book_id)');
-  await db.query('CREATE INDEX idx_review_id ON reviews (review_id)');
+  console.log('indexing books...')
+  await db.query('CREATE INDEX idx_book_id ON reviews (book_id)');
+  //await db.query('CREATE INDEX idx_review_id ON reviews (review_id)');
   console.log('indexed')
 }
 
@@ -261,11 +270,16 @@ async function indexing() {
 //Get Document Postgres
 async function getDocumentSQL(key) {
 
+
   try {
+    console.log('in db function', key)
     var t0 = performance.now()
 
     return await db.query('SELECT * FROM reviews WHERE book_id=$1', [key]);
+  } catch (error) {
+    console.log('error', error)
   } finally {
+    //db.end()
     var t1 = performance.now();
     let executionTime = t1 - t0;
     console.log('Time in milliseconds searching last 10% of database:', executionTime)

@@ -158,7 +158,7 @@ async function getDocumentMongo(key) {
     console.log("bookId ", key)
     var t0 = performance.now()
 
-    await client.connect();
+    //await client.connect();
     const database = client.db("mongo_sdc");
     const reviews = database.collection("reviews");
     const query = { bookId: key };

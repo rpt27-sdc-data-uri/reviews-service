@@ -1,20 +1,31 @@
 const { Pool, Client } = require('pg')
+//require('dotenv').config()
+
+// const client = new Client({
+//   user: 'root',
+//   host: 'localhost',
+//   database: 'audible',
+//   password: '',
+//   port: 5432,
+// })
 
 const client = new Client({
-  user: 'root',
-  host: 'localhost',
+  user: 'postgres',
+  host: '3.136.156.146',
   database: 'audible',
-  password: '',
+  password: 'password',
   port: 5432,
 })
 
 client.connect()
+//CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-// create users table
+
+/// create users table
 const createUsersTableText = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS users (
-  user_id SERIAL NOT NULL PRIMARY KEY,
+  user_id SERIAL NOT NULL,
   username VARCHAR(255),
   url VARCHAR(255)
 );
@@ -32,7 +43,7 @@ client.query(createUsersTableText)
 const createBooksTableText = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS books (
-  book_id SERIAL NOT NULL PRIMARY KEY,
+  book_id SERIAL NOT NULL,
   title VARCHAR(255)
 );
 `
@@ -49,7 +60,7 @@ client.query(createBooksTableText)
 const createReviewsTableText = `
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE TABLE IF NOT EXISTS reviews (
-  review_id SERIAL NOT NULL PRIMARY KEY,
+  review_id SERIAL NOT NULL,
   user_id INT,
   book_id INT,
   review TEXT,
@@ -72,6 +83,6 @@ client.query(createReviewsTableText)
   console.log('error', err)
 })
 
-// ,
+//
 //   FOREIGN KEY (user_id) REFERENCES users(user_id),
 //   FOREIGN KEY (book_id) REFERENCES books(book_id)

@@ -5,7 +5,7 @@ export let options = {
   scenarios: {
     constant_request_rate: {
       executor: 'constant-arrival-rate',
-      rate: 1000,
+      rate: 10,
       timeUnit: '1s',
       duration: '30s',
       preAllocatedVUs: 1000,
@@ -16,6 +16,6 @@ export let options = {
 
 export default function () {
     let id = Math.floor(Math.random() * (10000000 - 9000000 + 1) + 9000000)
-    http.get(http.url`http://localhost:4001/books/${id}/reviews`);
+    http.get(http.url`http://ec2-18-119-118-13.us-east-2.compute.amazonaws.com/books/${id}/reviews`);
 }
 

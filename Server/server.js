@@ -36,6 +36,7 @@ app.get('/books/:id/reviews', async (req, res) => {
 //_____This will return an array of objects with: bookId, reviewTitle, reviewerName, and reviewData.
 app.post('/reviews/carouselReviews', (req, res) => {
   let idArray = req.body.ids;
+  console.log('marcelo get')
   res.set({'Access-Control-Allow-Origin': '*'})
   arrayOfIdsReviewGetter(req, res, idArray)
 })
@@ -44,7 +45,7 @@ app.post('/reviews/carouselReviews', (req, res) => {
 
 //GET
 app.get('/benchmark/get/', async (req, res) => {
-  //console.log('marcelo get')
+  console.log('marcelo get')
   // const id = req.params.id;
   let reviews = await postgres.getDocumentSQL(req.body.id)
 
